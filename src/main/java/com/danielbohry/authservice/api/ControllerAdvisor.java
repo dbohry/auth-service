@@ -1,4 +1,4 @@
-package com.danielbohry.authservice.common;
+package com.danielbohry.authservice.api;
 
 import com.danielbohry.authservice.exceptions.NotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
