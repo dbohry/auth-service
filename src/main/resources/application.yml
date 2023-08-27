@@ -1,0 +1,11 @@
+server:
+  port: ${port:8080}
+
+spring:
+  data:
+    mongodb:
+      uri: ${mongo:}
+      database: ${database:auth}
+
+jwt:
+  secret: ${jwt_secret}
