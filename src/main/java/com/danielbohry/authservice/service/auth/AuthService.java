@@ -29,9 +29,9 @@ public class AuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = service.findByUsername(username);
-        var authority = new SimpleGrantedAuthority("ROLE_" + user.getRole());
+        var authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).toList();
 
-        return new User(user.getUsername(), user.getPassword(), singletonList(authority));
+        return new User(user.getUsername(), user.getPassword(), authorities);
     }
 
     public AuthenticationResponse signup(AuthenticationRequest request) {

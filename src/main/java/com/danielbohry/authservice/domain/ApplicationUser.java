@@ -19,12 +19,12 @@ public class ApplicationUser implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private Role role;
+    private List<Role> roles;
     private boolean active;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.name())).toList();
     }
 
     @Override

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.danielbohry.authservice.domain.Role.USER;
@@ -33,7 +34,7 @@ public class UserService {
 
         applicationUser.setId(UUID.randomUUID().toString());
         applicationUser.setPassword(applicationUser.getPassword());
-        applicationUser.setRole(USER);
+        applicationUser.setRoles(List.of(USER));
         applicationUser.setActive(true);
 
         repository.save(applicationUser);
