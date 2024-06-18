@@ -2,6 +2,7 @@ package com.danielbohry.authservice.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Data
 @Builder
+@Document("users")
 public class ApplicationUser implements UserDetails {
 
     private String id;

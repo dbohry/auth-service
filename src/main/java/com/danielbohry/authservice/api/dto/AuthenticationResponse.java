@@ -1,4 +1,4 @@
-package com.danielbohry.authservice.api;
+package com.danielbohry.authservice.api.dto;
 
 import lombok.Builder;
 import lombok.Data;

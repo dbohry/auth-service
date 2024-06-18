@@ -1,7 +1,7 @@
 package com.danielbohry.authservice.service.auth;
 
-import com.danielbohry.authservice.api.AuthenticationRequest;
-import com.danielbohry.authservice.api.AuthenticationResponse;
+import com.danielbohry.authservice.api.dto.AuthenticationRequest;
+import com.danielbohry.authservice.api.dto.AuthenticationResponse;
 import com.danielbohry.authservice.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

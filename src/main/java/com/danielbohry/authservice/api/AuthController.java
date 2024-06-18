@@ -1,5 +1,7 @@
 package com.danielbohry.authservice.api;
 
+import com.danielbohry.authservice.api.dto.AuthenticationRequest;
+import com.danielbohry.authservice.api.dto.AuthenticationResponse;
 import com.danielbohry.authservice.service.auth.AuthService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +26,7 @@ public class AuthController {
 
     @PostMapping("authenticate")
     public ResponseEntity<AuthenticationResponse> signin(@RequestBody AuthenticationRequest request) {
-        log.info("New signin for username [{}]", request.getUsername());
+        log.info("New signing for username [{}]", request.getUsername());
         var response = service.signin(request);
         return ResponseEntity.ok(response);
     }
