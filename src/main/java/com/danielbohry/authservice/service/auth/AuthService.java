@@ -2,6 +2,7 @@ package com.danielbohry.authservice.service.auth;
 
 import com.danielbohry.authservice.api.dto.AuthenticationRequest;
 import com.danielbohry.authservice.api.dto.AuthenticationResponse;
+import com.danielbohry.authservice.domain.ApplicationUser;
 import com.danielbohry.authservice.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,14 +36,9 @@ public class AuthService implements UserDetailsService {
 
     public AuthenticationResponse signup(AuthenticationRequest request) {
         var user = User.builder().username(request.getUsername()).password(passwordEncoder.encode(request.getPassword())).build();
-        service.save(convert(user));
-        var authentication = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-            .token(authentication.token())
-            .expirationDate(authentication.expirationDate())
-            .username(authentication.username())
-            .roles(authentication.authorities())
-            .build();
+        ApplicationUser saved = service.save(convert(user));
+        var authentication = jwtService.generateToken(saved);
+        return buildResponse(authentication);
     }
 
     public AuthenticationResponse signin(AuthenticationRequest request) {
@@ -51,6 +47,10 @@ public class AuthService implements UserDetailsService {
         );
         var user = service.findByUsername(request.getUsername());
         var authentication = jwtService.generateToken(user);
+        return buildResponse(authentication);
+    }
+
+    private static AuthenticationResponse buildResponse(Authentication authentication) {
         return AuthenticationResponse.builder()
             .token(authentication.token())
             .expirationDate(authentication.expirationDate())

@@ -29,7 +29,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
-    public void save(ApplicationUser applicationUser) {
+    public ApplicationUser save(ApplicationUser applicationUser) {
         validateUsername(applicationUser);
 
         applicationUser.setId(UUID.randomUUID().toString());
@@ -37,7 +37,7 @@ public class UserService {
         applicationUser.setRoles(List.of(USER));
         applicationUser.setActive(true);
 
-        repository.save(applicationUser);
+        return repository.save(applicationUser);
     }
 
     public ApplicationUser update(ApplicationUser applicationUser) {
