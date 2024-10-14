@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public Authentication generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(
                 "authorities", userDetails.getAuthorities().stream()
@@ -49,10 +50,18 @@ public class JwtService {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
-        return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 48))
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
+    private Authentication generateToken(Map<String, Object> claims, UserDetails userDetails) {
+        Date expirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 48);
+
+        return new Authentication(Jwts.builder().setClaims(claims)
+            .setSubject(userDetails.getUsername())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(expirationDate)
+            .signWith(SignatureAlgorithm.HS256, secret).compact(),
+            expirationDate.toInstant(),
+            userDetails.getUsername(),
+            userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
+        );
     }
 
     private Claims extractAllClaims(String token) {

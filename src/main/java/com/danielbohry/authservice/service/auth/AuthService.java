@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.danielbohry.authservice.service.auth.UserConverter.convert;
-import static java.util.Collections.singletonList;
 
 @Service
 @AllArgsConstructor
@@ -37,8 +36,13 @@ public class AuthService implements UserDetailsService {
     public AuthenticationResponse signup(AuthenticationRequest request) {
         var user = User.builder().username(request.getUsername()).password(passwordEncoder.encode(request.getPassword())).build();
         service.save(convert(user));
-        var jwt = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwt).build();
+        var authentication = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+            .token(authentication.token())
+            .expirationDate(authentication.expirationDate())
+            .username(authentication.username())
+            .roles(authentication.authorities())
+            .build();
     }
 
     public AuthenticationResponse signin(AuthenticationRequest request) {
@@ -46,8 +50,13 @@ public class AuthService implements UserDetailsService {
                 request.getUsername(), request.getPassword())
         );
         var user = service.findByUsername(request.getUsername());
-        var jwt = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwt).build();
+        var authentication = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+            .token(authentication.token())
+            .expirationDate(authentication.expirationDate())
+            .username(authentication.username())
+            .roles(authentication.authorities())
+            .build();
     }
 
 }
