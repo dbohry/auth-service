@@ -21,12 +21,12 @@ public class UserService {
 
     public UserDetailsService userDetailsService() {
         return username -> repository.findByUsernameAndActiveTrue(username)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+            .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     public ApplicationUser findByUsername(String username) {
         return repository.findByUsernameAndActiveTrue(username)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+            .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     public ApplicationUser save(ApplicationUser applicationUser) {
