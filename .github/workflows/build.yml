@@ -16,7 +16,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '21'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Build jar
       run: chmod +x ./gradlew && ./gradlew clean build
     - name: Run tests
