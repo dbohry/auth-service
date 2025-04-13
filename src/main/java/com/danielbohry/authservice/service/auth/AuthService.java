@@ -36,7 +36,7 @@ public class AuthService implements UserDetailsService {
 
     public AuthenticationResponse signup(AuthenticationRequest request) {
         var user = User.builder().username(request.getUsername()).password(passwordEncoder.encode(request.getPassword())).build();
-        ApplicationUser saved = service.save(convert(user));
+        ApplicationUser saved = service.create(convert(user));
         var authentication = jwtService.generateToken(saved);
         return buildResponse(authentication);
     }
