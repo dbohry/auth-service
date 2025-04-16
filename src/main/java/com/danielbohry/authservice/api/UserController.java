@@ -25,11 +25,11 @@ import java.util.List;
 public class UserController {
 
     @GetMapping("current")
-    public ResponseEntity<Object> get() {
+    public ResponseEntity<?> get() {
         SecurityContext context = SecurityContextHolder.getContext();
         Object principal = context.getAuthentication().getPrincipal();
         if (principal instanceof ApplicationUser user) {
-            return ResponseEntity.ok(new UserResponse(user.getId(), user.getUsername()));
+            return ResponseEntity.ok(new UserResponse(user.getId(), user.getUsername(), user.getRoles().stream().map(Enum::toString).toList()));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
