@@ -35,26 +35,27 @@ public class AuthService implements UserDetailsService {
     }
 
     public AuthenticationResponse signup(AuthenticationRequest request) {
-        var user = User.builder().username(request.getUsername()).password(passwordEncoder.encode(request.getPassword())).build();
+        UserDetails user = User.builder().username(request.getUsername()).password(passwordEncoder.encode(request.getPassword())).build();
         ApplicationUser saved = service.create(convert(user));
-        var authentication = jwtService.generateToken(saved);
-        return buildResponse(authentication);
+        Authentication authentication = jwtService.generateToken(saved);
+        return buildResponse(saved.getId(), authentication);
     }
 
     public AuthenticationResponse signin(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(), request.getPassword())
+            request.getUsername(), request.getPassword())
         );
-        var user = service.findByUsername(request.getUsername());
-        var authentication = jwtService.generateToken(user);
-        return buildResponse(authentication);
+        ApplicationUser user = service.findByUsername(request.getUsername());
+        Authentication authentication = jwtService.generateToken(user);
+        return buildResponse(user.getId(), authentication);
     }
 
-    private static AuthenticationResponse buildResponse(Authentication authentication) {
+    private static AuthenticationResponse buildResponse(String id, Authentication authentication) {
         return AuthenticationResponse.builder()
+            .id(id)
+            .username(authentication.username())
             .token(authentication.token())
             .expirationDate(authentication.expirationDate())
-            .username(authentication.username())
             .roles(authentication.authorities())
             .build();
     }

@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,9 +37,9 @@ public class JwtService {
     public Authentication generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(
-                "authorities", userDetails.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(toSet())
+            "authorities", userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(toSet())
         );
         return generateToken(claims, userDetails);
     }
@@ -52,12 +51,13 @@ public class JwtService {
 
     private Authentication generateToken(Map<String, Object> claims, UserDetails userDetails) {
         Date expirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 48);
-
-        return new Authentication(Jwts.builder().setClaims(claims)
+        String token = Jwts.builder().setClaims(claims)
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(expirationDate)
-            .signWith(SignatureAlgorithm.HS256, secret).compact(),
+            .signWith(SignatureAlgorithm.HS256, secret).compact();
+
+        return new Authentication(token,
             expirationDate.toInstant(),
             userDetails.getUsername(),
             userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()

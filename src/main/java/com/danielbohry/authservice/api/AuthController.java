@@ -23,14 +23,14 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("register")
-    public ResponseEntity<AuthenticationResponse> signup(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
         log.info("New signup for username [{}]", request.getUsername());
         var response = service.signup(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("authenticate")
-    public ResponseEntity<AuthenticationResponse> signin(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         log.info("New signing for username [{}]", request.getUsername());
         var response = service.signin(request);
         return ResponseEntity.ok(response);
