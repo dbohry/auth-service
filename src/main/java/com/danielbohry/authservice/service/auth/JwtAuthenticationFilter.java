@@ -35,6 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         jwt = authHeader.substring(7);
+
+        if (jwtService.isTokenExpired(jwt)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "JWT token is expired");
+            return;
+        }
+
         username = jwtService.extractUsername(jwt);
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.userDetailsService().loadUserByUsername(username);
