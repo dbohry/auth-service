@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -24,14 +26,14 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
-        log.info("New signup for username [{}]", request.getUsername());
+        log.info("Registering new username [{}]", request.getUsername());
         var response = service.signup(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(CREATED).body(response);
     }
 
     @PostMapping("authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        log.info("New signing for username [{}]", request.getUsername());
+        log.info("Authenticating username [{}]", request.getUsername());
         var response = service.signin(request);
         return ResponseEntity.ok(response);
     }
