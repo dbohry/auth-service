@@ -7,7 +7,7 @@ plugins {
 group = 'com.danielbohry'
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '25'
 }
 
 configurations {
@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+    implementation 'org.apache.commons:commons-lang3:3.19.0'
     implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 
     compileOnly 'org.projectlombok:lombok'
